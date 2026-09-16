@@ -5,14 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MY MUNAY | Kiosco & Avícola</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
-    <script type="importmap">
-        {
-            "imports": {
-                "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"
-            }
-        }
-    </script>
     <style>
         /* ── TOKENS (exactamente igual al original) ────────────────── */
         :root {
@@ -797,21 +789,17 @@
 <div id="deleteAllOrdersModal" class="modal"><div class="modal-content"><h3>Eliminar historial</h3><p>Eliminará todos los pedidos.</p><div style="display:flex;justify-content:flex-end;gap:10px;"><button id="cancelDeleteOrdersBtn" class="btn btn-outline">Cancelar</button><button id="confirmDeleteOrdersBtn" class="btn btn-danger">Eliminar todo</button></div></div></div>
 <div class="toast-container" id="toastContainer"></div>
 
-<script type="module">
-    import { initializeApp } from "firebase/app";
-    import { getDatabase, ref, set, update, push, remove, onValue, runTransaction, get } from "firebase/database";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAoa976o0MKxkXcDsIqO--z97VDdyOmXQs",
-        authDomain: "raki-64e1c.firebaseapp.com",
-        databaseURL: "https://raki-64e1c-default-rtdb.firebaseio.com",
-        projectId: "raki-64e1c",
-        storageBucket: "raki-64e1c.firebasestorage.app",
-        messagingSenderId: "49344057368",
-        appId: "1:49344057368:web:09df3cad8b328f37e8336d"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+<script>
+    const REST = "https://raki-64e1c-default-rtdb.firebaseio.com/";
+    async function api(path, method = "GET", body = null) {
+        const opt = { method };
+        if (body !== undefined) { opt.headers = { "Content-Type": "application/json" }; opt.body = JSON.stringify(body); }
+        const r = await fetch(REST + path + ".json", opt);
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const t = await r.text();
+        return t ? JSON.parse(t) : null;
+    }
+    function objToArray(o) { return Object.entries(o || {}).map(([id, v]) => ({ id, ...v })); }
 
     let products = [], cart = [], orders = [], isAdmin = false, selectedCategory = "Todas", storedLocationLink = null, searchDebounceTimer;
     const OWNER_WHATSAPP = "5492645424270";
@@ -890,9 +878,9 @@
     function resetAutoSlide() { if (slideInterval) { clearInterval(slideInterval); startAutoSlide(); } }
     function pauseAutoSlide() { if (slideInterval) clearInterval(slideInterval); slideInterval = null; }
     function resumeAutoSlide() { if (!slideInterval && heroImages.length > 1) startAutoSlide(); }
-    function subscribeToHeroCarousel() { onValue(ref(db, "settings/heroCarousel"), (snap) => { const v = snap.val(); heroImages = (v && v.images && v.images.length) ? v.images : ["https://images.unsplash.com/photo-1596987928212-f07f8e17415c?w=1400&auto=format&fit=crop&q=80"]; renderHeroCarousel(); }); }
-    async function loadAdminCarouselImages() { if (!carouselImagesListDiv) return; const snap = await get(ref(db, "settings/heroCarousel")); const v = snap.val(); let images = (v && v.images) ? v.images : ["https://images.unsplash.com/photo-1596987928212-f07f8e17415c?w=1400&auto=format&fit=crop&q=80"]; carouselImagesListDiv.innerHTML = images.map((img, idx) => `<div class="carousel-image-item"><img src="${img}"><button class="remove-carousel-img" data-index="${idx}">✕</button></div>`).join(''); document.querySelectorAll('.remove-carousel-img').forEach(btn => btn.addEventListener('click', async (e) => { const idx = parseInt(btn.dataset.index); if (!isNaN(idx)) { const newImages = [...images]; newImages.splice(idx, 1); await set(ref(db, "settings/heroCarousel"), { images: newImages }); showToast("Imagen eliminada", "success"); } })); }
-    async function addHeroImage(file) { if (!file) return; try { const base64 = await fileToBase64(file); const snap = await get(ref(db, "settings/heroCarousel")); const v = snap.val(); let images = (v && v.images) ? v.images : []; images.push(base64); await set(ref(db, "settings/heroCarousel"), { images }); showToast("Imagen agregada", "success"); } catch(err) { showToast("Error: " + err.message, "error"); } }
+    function subscribeToHeroCarousel() { const load = async () => { try { const v = await api("settings/heroCarousel"); heroImages = (v && v.images && v.images.length) ? v.images : ["https://images.unsplash.com/photo-1596987928212-f07f8e17415c?w=1400&auto=format&fit=crop&q=80"]; renderHeroCarousel(); } catch (e) { heroImages = ["https://images.unsplash.com/photo-1596987928212-f07f8e17415c?w=1400&auto=format&fit=crop&q=80"]; renderHeroCarousel(); } }; load(); setInterval(load, 8000); }
+    async function loadAdminCarouselImages() { if (!carouselImagesListDiv) return; try { const v = await api("settings/heroCarousel"); let images = (v && v.images) ? v.images : ["https://images.unsplash.com/photo-1596987928212-f07f8e17415c?w=1400&auto=format&fit=crop&q=80"]; carouselImagesListDiv.innerHTML = images.map((img, idx) => `<div class="carousel-image-item"><img src="${img}"><button class="remove-carousel-img" data-index="${idx}">✕</button></div>`).join(''); document.querySelectorAll('.remove-carousel-img').forEach(btn => btn.addEventListener('click', async (e) => { const idx = parseInt(btn.dataset.index); if (!isNaN(idx)) { const newImages = [...images]; newImages.splice(idx, 1); await api("settings/heroCarousel", "PUT", { images: newImages }); showToast("Imagen eliminada", "success"); } })); } catch (err) { showToast("Error: " + err.message, "error"); } }
+    async function addHeroImage(file) { if (!file) return; try { const base64 = await fileToBase64(file); let v = null; try { v = await api("settings/heroCarousel"); } catch (e) {} let images = (v && v.images) ? v.images : []; images.push(base64); await api("settings/heroCarousel", "PUT", { images }); showToast("Imagen agregada", "success"); } catch(err) { showToast("Error: " + err.message, "error"); } }
 
     function renderProducts(filter = "") {
         if (!productsGrid) return;
@@ -911,12 +899,12 @@
         }).join('');
     }
     function renderCategoryFilters() { if (!categoryFiltersDiv) return; categoryFiltersDiv.innerHTML = CATEGORIES.map(cat => `<div class="filter-chip ${selectedCategory === cat ? 'active' : ''}" data-category="${cat}">${cat}</div>`).join(''); document.querySelectorAll('.filter-chip').forEach(chip => chip.addEventListener('click', () => { selectedCategory = chip.dataset.category; renderCategoryFilters(); renderProducts(searchInput.value); })); }
-    function subscribeToProducts() { onValue(ref(db, "products"), snap => { const v = snap.val() || {}; products = Object.entries(v).map(([id, data]) => ({ id, ...data })).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); renderProducts(searchInput.value); renderCart(); updateCartBadge(); if (isAdmin) updateAdminStats(); }); }
-    async function addProductToFirestore(p) { await push(ref(db, "products"), p); }
-    async function deleteProductFromFirestore(id) { await remove(ref(db, "products/" + id)); }
-    async function updateProductInFirestore(id, data) { await update(ref(db, "products/" + id), data); }
-    function subscribeToOrders() { onValue(ref(db, "orders"), snap => { const v = snap.val() || {}; orders = Object.entries(v).map(([id, data]) => ({ id, ...data })).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)); renderOrders(); if (isAdmin) updateAdminStats(); }); }
-    async function deleteAllOrders() { await remove(ref(db, "orders")); showToast("Historial eliminado", "success"); }
+    function subscribeToProducts() { const load = async () => { try { const v = await api("products"); products = objToArray(v).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); renderProducts(searchInput.value); renderCart(); updateCartBadge(); if (isAdmin) updateAdminStats(); } catch (e) { console.error(e); } }; load(); setInterval(load, 5000); }
+    async function addProductToFirestore(p) { const r = await api("products", "POST", p); return r ? r.name : null; }
+    async function deleteProductFromFirestore(id) { await api("products/" + id, "DELETE"); }
+    async function updateProductInFirestore(id, data) { const cur = await api("products/" + id); await api("products/" + id, "PUT", Object.assign({}, cur || {}, data)); }
+    function subscribeToOrders() { const load = async () => { try { const v = await api("orders"); orders = objToArray(v).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)); renderOrders(); if (isAdmin) updateAdminStats(); } catch (e) { console.error(e); } }; load(); setInterval(load, 5000); }
+    async function deleteAllOrders() { await api("orders", "DELETE"); showToast("Historial eliminado", "success"); }
     function renderOrders() { if (!ordersContainer) return; if (!orders.length) { ordersContainer.innerHTML = `<p>No hay pedidos aún.</p>`; return; } ordersContainer.innerHTML = orders.map(o => `<div class="order-card"><div class="order-header"><span class="order-date">${escapeHtml(o.date)}</span><span class="order-total">$${o.total.toFixed(2)}</span></div><div class="order-detail"><strong>${escapeHtml(o.name)}</strong> · ${escapeHtml(o.phone)}<br>${o.locationLink ? `<a href="${o.locationLink}" target="_blank">📍 Ver ubicación</a>` : "Sin ubicación"}<br>${o.items.map(i => `${escapeHtml(i.name)} ×${i.quantity}`).join(', ')}</div></div>`).join(''); }
     function updateAdminStats() { statProducts.textContent = products.length; statOrders.textContent = orders.length; statRevenue.textContent = `$${orders.reduce((s,o)=>s+(o.total||0),0).toFixed(2)}`; statStock.textContent = products.reduce((s,p)=>s+(p.stock||0),0); }
     function saveCart() { localStorage.setItem("aymara_cart", JSON.stringify(cart)); }
@@ -963,12 +951,18 @@
         if (!items.length) { showToast("El carrito está vacío", "error"); return false; }
         try {
             for (let it of items) {
-                const productRef = ref(db, "products/" + it.product.id);
-                await runTransaction(productRef, (current) => {
-                    if (!current) throw new Error(`Producto inexistente: ${it.product.name}`);
-                    if (current.stock < it.quantity) throw new Error(`Stock insuficiente para ${it.product.name}`);
-                    return { ...current, stock: current.stock - it.quantity };
-                });
+                let done = false, attempts = 0;
+                while (!done && attempts < 5) {
+                    attempts++;
+                    const cur = await api("products/" + it.product.id);
+                    if (!cur) throw new Error(`Producto inexistente: ${it.product.name}`);
+                    if (cur.stock < it.quantity) throw new Error(`Stock insuficiente para ${it.product.name}`);
+                    const updated = Object.assign({}, cur, { stock: cur.stock - it.quantity });
+                    const check = await api("products/" + it.product.id);
+                    if (check && check.stock === cur.stock) { await api("products/" + it.product.id, "PUT", updated); done = true; }
+                    else await new Promise(r => setTimeout(r, 250));
+                }
+                if (!done) throw new Error("No se pudo actualizar stock de " + it.product.name);
             }
             const order = {
                 name, phone, locationLink,
@@ -977,7 +971,7 @@
                 date: new Date().toLocaleString(),
                 timestamp: Date.now()
             };
-            await push(ref(db, "orders"), order);
+            await api("orders", "POST", order);
             const total = order.total;
             let message = `HOLA QUIERO COMPRAR%0A🛒 *${storeNameDisplay.innerText}* 🛒%0A👤 Cliente: ${encodeURIComponent(name)}%0A📞 Tel: ${encodeURIComponent(phone)}%0A📦 Detalle:%0A`;
             items.forEach(i => { message += `• ${i.product.name} x${i.quantity} = $${(i.product.price * i.quantity).toFixed(2)}%0A`; });
@@ -1011,8 +1005,8 @@
             if (e.target.closest('.remove-cart')) updateCartItemQuantity(id, 0); 
         }); 
     }
-    async function loadStoreSettings() { const snap = await get(ref(db, "settings/storeInfo")); const data = snap.val(); if (data) { if (data.logoBase64) { storeLogoImg.src = data.logoBase64; storeLogoImg.style.display = "block"; } if (data.storeName) { storeNameDisplay.innerText = data.storeName; storeNameInput.value = data.storeName; } } }
-    async function saveStoreSettings(name, logo) { const data = { storeName: name }; if (logo) data.logoBase64 = logo; await update(ref(db, "settings/storeInfo"), data); storeNameDisplay.innerText = name; if (logo) { storeLogoImg.src = logo; storeLogoImg.style.display = "block"; } showToast("Configuración guardada", "success"); }
+    async function loadStoreSettings() { try { const data = await api("settings/storeInfo"); if (data) { if (data.logoBase64) { storeLogoImg.src = data.logoBase64; storeLogoImg.style.display = "block"; } if (data.storeName) { storeNameDisplay.innerText = data.storeName; storeNameInput.value = data.storeName; } } } catch (e) { console.error(e); } }
+    async function saveStoreSettings(name, logo) { const data = { storeName: name }; if (logo) data.logoBase64 = logo; let cur = {}; try { cur = await api("settings/storeInfo") || {}; } catch (e) {} await api("settings/storeInfo", "PUT", Object.assign({}, cur, data)); storeNameDisplay.innerText = name; if (logo) { storeLogoImg.src = logo; storeLogoImg.style.display = "block"; } showToast("Configuración guardada", "success"); }
     function escapeHtml(str) { if(!str) return ""; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
     function init() {
