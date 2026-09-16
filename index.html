@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MY MUNAY | Kiosco & Avícola</title>
+    <title>PET SHOP | Comida para perros y gatos</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
 <style>
         /* ── TOKENS (exactamente igual al original) ────────────────── */
@@ -638,7 +638,7 @@
 <body>
 
 <div class="announcement-bar">
-    3 Cuotas sin interés &nbsp;·&nbsp; Envío a domicilio &nbsp;·&nbsp; Pedido por WhatsApp
+    Comida premium para perros y gatos &nbsp;·&nbsp; Envío a domicilio &nbsp;·&nbsp; Pedido por WhatsApp
 </div>
 
 <header class="store-header">
@@ -646,8 +646,8 @@
         <div class="logo">
             <img id="storeLogoImg" class="logo-img" src="" alt="Logo">
             <div class="logo-text">
-                <h1 id="storeNameDisplay">MY MUNAY</h1>
-                <p>Kiosco &amp; Avícola</p>
+                <h1 id="storeNameDisplay">PET SHOP</h1>
+                <p>Comida y accesorios para mascotas</p>
             </div>
         </div>
         <div class="header-actions">
@@ -669,9 +669,9 @@
         <div class="hero-slides" id="heroSlides"></div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <p class="hero-eyebrow">Nueva colección 2026</p>
-            <h1 class="hero-title">Productos auténticos<br>para tu día a día</h1>
-            <p class="hero-desc">Mates, tazas, libretas y mucho más. Diseño y calidad que hacen especiales los momentos cotidianos.</p>
+            <p class="hero-eyebrow">Alimentos premium 2026</p>
+            <h1 class="hero-title">Comida de calidad<br>para tu mascota</h1>
+            <p class="hero-desc">Alimento balanceado y snacks para perros y gatos. Calidad que hace especial los cuidados de tu mascota.</p>
             <button class="hero-cta" id="heroShopBtn">
                 Explorar colección
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -688,7 +688,7 @@
 
     <div class="features-strip">
         <div class="feature-item"><div class="feature-icon">🚀</div><div class="feature-text"><b>Envío rápido</b><span>Entrega a domicilio</span></div></div>
-        <div class="feature-item"><div class="feature-icon">✦</div><div class="feature-text"><b>Calidad garantizada</b><span>Productos seleccionados</span></div></div>
+        <div class="feature-item"><div class="feature-icon">✦</div><div class="feature-text"><b>Calidad garantizada</b><span>Alimentos seleccionados</span></div></div>
         <div class="feature-item"><div class="feature-icon">💬</div><div class="feature-text"><b>Pedido por WhatsApp</b><span>Atención personalizada</span></div></div>
         <div class="feature-item"><div class="feature-icon">📍</div><div class="feature-text"><b>Zona de entrega</b><span>Llegamos a tu puerta</span></div></div>
     </div>
@@ -699,7 +699,7 @@
         <div class="settings-section">
             <h3>Configuración de la tienda</h3>
             <div class="form-group">
-                <div class="form-field"><label>Nombre de la tienda</label><input type="text" id="storeNameInput" placeholder="MY MUNAY"></div>
+                <div class="form-field"><label>Nombre de la tienda</label><input type="text" id="storeNameInput" placeholder="PET SHOP"></div>
                 <div class="form-field"><label>Logo (PNG, JPG)</label><input type="file" id="storeLogoFile" accept="image/*"><div id="logoPreview" class="image-preview" style="display:none;"></div></div>
                 <div style="padding-top:22px;"><button id="saveStoreSettingsBtn" class="btn btn-primary">Guardar</button></div>
             </div>
@@ -718,7 +718,7 @@
         </div>
         <div class="categories-section">
             <h3>Categorías disponibles</h3>
-            <p>Mate · Taza · Libreta · Porta Sahumerio · Porta Celular · Varios · Yerbera · Azucarera</p>
+            <p>Comida Perro · Comida Gato · Snacks · Higiene · Accesorios · Varios</p>
         </div>
         <div id="adminStats" class="admin-stats">
             <div class="stat-card"><h4>Productos</h4><p id="statProducts">0</p></div>
@@ -729,10 +729,10 @@
         <form id="addProductForm" style="margin-bottom:32px;">
             <h3 style="font-size:.85rem;font-weight:800;margin-bottom:16px;">Agregar nuevo producto</h3>
             <div class="form-group">
-                <div class="form-field"><label>Nombre</label><input type="text" id="prodName" required placeholder="Ej: Mate Imperial"></div>
+                <div class="form-field"><label>Nombre</label><input type="text" id="prodName" required placeholder="Ej: Balanceado para perro"></div>
                 <div class="form-field"><label>Precio</label><input type="number" id="prodPrice" step="0.01" required placeholder="0.00"></div>
                 <div class="form-field"><label>Stock</label><input type="number" id="prodStock" step="1" value="10" required></div>
-                <div class="form-field"><label>Categoría</label><select id="prodCategory"><option>Mate</option><option>Taza</option><option>Libreta</option><option>Porta Sahumerio</option><option>Porta Celular</option><option>Varios</option><option>Yerbera</option><option>Azucarera</option></select></div>
+                <div class="form-field"><label>Categoría</label><select id="prodCategory"><option>Comida Perro</option><option>Comida Gato</option><option>Snacks</option><option>Higiene</option><option>Accesorios</option><option>Varios</option></select></div>
                 <div class="form-field"><label>Foto</label><input type="file" id="prodImageFile" accept="image/*"><div id="addImagePreview" class="image-preview" style="display:none;"></div></div>
                 <div style="padding-top:22px;"><button type="submit" id="submitProductBtn" class="btn btn-primary">Agregar producto</button></div>
             </div>
@@ -759,15 +759,15 @@
         <p class="section-label">Opiniones</p>
         <h2 class="section-title">Lo que dicen nuestros clientes</h2>
         <div class="testimonials-grid">
-            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">"Los mates son increíbles, la calidad supera todas mis expectativas."</p><div class="testimonial-author"><div class="author-avatar">ML</div><div><div class="author-name">María L.</div><div class="author-role">Cliente frecuente</div></div></div></div>
-            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">"Compré varias libretas como regalo y todos quedaron encantados."</p><div class="testimonial-author"><div class="author-avatar">CR</div><div><div class="author-name">Carlos R.</div><div class="author-role">Comprador verificado</div></div></div></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">"La comida de perro es excelente, mi perro no deja ni una miguita."</p><div class="testimonial-author"><div class="author-avatar">ML</div><div><div class="author-name">María L.</div><div class="author-role">Cliente frecuente</div></div></div></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">"Mi gata era muy exigente y con esta comida come toda feliz."</p><div class="testimonial-author"><div class="author-avatar">CR</div><div><div class="author-name">Carlos R.</div><div class="author-role">Comprador verificado</div></div></div></div>
             <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">"El proceso de pedido por WhatsApp es súper fácil y rápido."</p><div class="testimonial-author"><div class="author-avatar">SP</div><div><div class="author-name">Sofía P.</div><div class="author-role">Cliente frecuente</div></div></div></div>
         </div>
     </section>
 
     <div class="promo-banner">
-        <h2>Diseño que inspira</h2>
-        <p>Cada producto está pensado para hacer de lo cotidiano algo extraordinario.</p>
+        <h2>Nutrición que cuida</h2>
+        <p>Cada alimento está pensado para la salud y la felicidad de tu mascota.</p>
         <button class="promo-cta" id="heroBannerBtn">Ver toda la colección <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
     </div>
 
@@ -778,11 +778,11 @@
 
     <footer class="footer">
         <div class="footer-inner">
-            <div class="footer-brand"><h3>MY MUNAY</h3></div>
-            <div class="footer-col"><h4>Categorías</h4><ul><li>Mates</li><li>Tazas</li><li>Libretas</li><li>Yerberas</li><li>Azucareras</li><li>Varios</li></ul></div>
+            <div class="footer-brand"><h3>PET SHOP</h3></div>
+            <div class="footer-col"><h4>Categorías</h4><ul><li>Comida para perros</li><li>Comida para gatos</li><li>Snacks</li><li>Higiene</li><li>Accesorios</li><li>Varios</li></ul></div>
             <div class="footer-col"><h4>Información</h4><ul><li>Envíos</li><li>Garantía</li><li>Contacto</li><li>Sobre nosotros</li></ul></div>
         </div>
-        <div class="footer-bottom"><span>© 2026 MY MUNAY. Todos los derechos reservados.</span><span>Hecho con ♥ en Argentina</span></div>
+        <div class="footer-bottom"><span>© 2026 PET SHOP. Todos los derechos reservados.</span><span>Hecho con ♥ en Argentina</span></div>
     </footer>
 </div>
 
@@ -817,7 +817,7 @@
     // ✅ NÚMERO CORREGIDO PARA ARGENTINA (código país 54 + 9 + 264 5424270)
     const OWNER_WHATSAPP = "542645252045";
     const ADMIN_PASSWORD = "VALENTINA";
-    const CATEGORIES = ["Todas", "Mate", "Taza", "Libreta", "Porta Sahumerio", "Porta Celular", "Varios", "Yerbera", "Azucarera"];
+    const CATEGORIES = ["Todas","Comida Perro","Comida Gato","Snacks","Higiene","Accesorios","Varios"];
 
     // Elementos DOM
     let productsGrid, cartContainer, cartCountBadge, searchInput, adminPanel, adminToggleBtn, ordersContainer, floatingCartBadge, categoryFiltersDiv;
@@ -1042,7 +1042,7 @@
     }
 
     async function handleAddProduct(e) { e.preventDefault(); const name = prodName.value.trim(), price = parseFloat(prodPrice.value), stock = parseInt(prodStock.value), category = prodCategory.value, file = prodImageFile.files[0]; if (!name || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0) { showToast("Completá todos los campos", "error"); return; } submitProductBtn.disabled = true; submitProductBtn.textContent = "Procesando..."; try { const img = file ? await fileToBase64(file) : null; await addProductToFirestore({ name, price, stock, category, imageBase64: img, createdAt: Date.now() }); prodName.value = ""; prodPrice.value = ""; prodStock.value = "10"; prodImageFile.value = ""; addImagePreviewDiv.style.display = "none"; showToast(`${name} agregado`, "success"); } catch(err) { showToast("Error: " + err.message, "error"); } finally { submitProductBtn.disabled = false; submitProductBtn.textContent = "Agregar producto"; } }
-    function openEditModal(product) { editProductId.value = product.id; editName.value = product.name; editPrice.value = product.price; editStock.value = product.stock; editCategory.value = product.category || "Mate"; editImageFile.value = ""; editImagePreview.style.display = "none"; editImagePreview.innerHTML = ""; editProductModal.classList.add("show"); }
+    function openEditModal(product) { editProductId.value = product.id; editName.value = product.name; editPrice.value = product.price; editStock.value = product.stock; editCategory.value = product.category || "Comida Perro"; editImageFile.value = ""; editImagePreview.style.display = "none"; editImagePreview.innerHTML = ""; editProductModal.classList.add("show"); }
     async function saveEditProduct() { const id = editProductId.value, name = editName.value.trim(), price = parseFloat(editPrice.value), stock = parseInt(editStock.value), category = editCategory.value, file = editImageFile.files[0]; if (!name || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0) { showToast("Datos inválidos", "error"); return; } const update = { name, price, stock, category }; if (file) try { update.imageBase64 = await fileToBase64(file); } catch(e) { showToast("Error imagen", "error"); } await updateProductInFirestore(id, update); showToast("Producto actualizado", "success"); editProductModal.classList.remove("show"); }
     function deleteProduct(id) { if (confirm("¿Eliminar producto?")) deleteProductFromFirestore(id); }
     
